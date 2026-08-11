@@ -1,0 +1,11 @@
+[package]
+name = "loco"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+futures-util = { version = "0.3.33", default-features = false, features = ["sink", "std"] }
+neurun = { version = "0.1.0", path = "../sdks/rust-sdk" }
+serde_json = "1.0.151"
+tokio = { version = "1.53.1", features = ["rt-multi-thread", "macros", "net", "time"] }
+tokio-tungstenite = "0.30.0"
