@@ -1,36 +1,34 @@
 # loco
 
-Opens a browser wearing a Neurun profile, navigates, waits ten seconds, exits.
+Opens a browser session through Neurun, navigates, waits ten seconds, exits.
 
 ## Run
 
-Two things have to be up first: the Neurun API, and `neurun-browser` on
-loopback. The control plane never opens a browser, so nothing else will start
-that server.
+The control plane has to be up and listening on loopback. Neurun spawns the
+browser service itself, so nothing else needs starting.
 
 ```sh
-cd ../browser && cargo run          # 127.0.0.1:1268
-
-export NEURUN_URL=http://localhost:8080
-export NEURUN_API_KEY=neu_…         # needs browser_profiles:write
+export NEURUN_GRPC_ADDRESS=127.0.0.1:7000
+export NEURUN_EXECUTION_TOKEN=net_…
 cargo run -- bp_01J… https://example.com
 ```
 
 The profile id can come from `NEURUN_PROFILE_ID` instead of the first argument;
-the URL defaults to `https://example.com`. `NEURUN_BROWSER_ADDR` moves the
-browser server, and must stay on loopback.
+leaving it out opens a plain browser. The URL defaults to `https://example.com`.
 
 ## What it does
 
-The [Rust SDK](../sdks/rust-sdk) reads the profile and its cookies, opens a
-session carrying both, and hands back a CDP endpoint. Driving that endpoint is
-this program's half of the loop: attach to the page the browser already has
-open, `Page.navigate`, wait, then close — which is what stores whatever the
-browser picked up.
+The [Rust SDK](../sdks/rust-sdk) asks Neurun for a session, gets an id back, and
+drives that id. This program never learns where the browser runs and cannot be
+told — which is exactly why the dashboard can list this session and stream its
+display while it runs.
 
-The page it already has open, rather than a new tab, because the browser server
-captures DOM storage from the page its own CDP session is attached to. A second
-tab would close with the cookies but none of the storage.
+`execute` carries an opaque command. Neurun brokers sessions rather than browser
+semantics and never parses one, so the encoding here is between loco and
+`neurun-browser`.
 
-Chrome only, for now. A Firefox profile opens a BiDi endpoint and closes
-carrying nothing, so it exits rather than pretending otherwise.
+## Credentials
+
+`NEURUN_EXECUTION_TOKEN` is what a worker mints for a real execution. Running
+loco by hand means supplying one yourself; there is no API key path, because a
+handler is code the control plane started rather than a client that signed in.
