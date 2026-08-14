@@ -23,9 +23,9 @@ drives that id. This program never learns where the browser runs and cannot be
 told — which is exactly why the dashboard can list this session and stream its
 display while it runs.
 
-`execute` carries an opaque command. Neurun brokers sessions rather than browser
-semantics and never parses one, so the encoding here is between loco and
-`neurun-browser`.
+`navigate` and `wait_for_navigation` are each their own call, shaped after the
+browser's own function. Neurun brokers sessions rather than browser semantics
+and never reinterprets one, so the call reaches `neurun-browser` unchanged.
 
 ## Credentials
 

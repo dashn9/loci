@@ -55,19 +55,12 @@ async fn main() -> Result<()> {
 
 async fn visit(session: &mut neurun::Session, url: &str) -> Result<()> {
     println!("navigating to {url}");
-    session.execute(navigate(url)).await?;
+    session.navigate(url).await?;
+    session.wait_for_navigation().await?;
 
     println!("holding for {}s", LINGER.as_secs());
     tokio::time::sleep(LINGER).await;
     Ok(())
-}
-
-/// A browser-service command.
-///
-/// The payload is opaque to Neurun, which brokers sessions rather than browser
-/// semantics, so the encoding is between this program and `neurun-browser`.
-fn navigate(url: &str) -> Vec<u8> {
-    format!(r#"{{"method":"navigate","params":{{"url":"{url}"}}}}"#).into_bytes()
 }
 
 fn environment(name: &str) -> Option<String> {
