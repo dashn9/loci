@@ -4,5 +4,5 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-neurun = { version = "0.1.0", path = "../sdks/rust-sdk" }
+neurun = { version = "0.1.0", path = "D:\\Documents\\m-workspace\\neurun\\sdks\\rust-sdk" }
 tokio = { version = "1.53.1", features = ["rt-multi-thread", "macros", "time"] }
