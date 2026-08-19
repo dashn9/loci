@@ -15,12 +15,12 @@ use neurun::Browser;
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
 /// How long the page stays up before the session closes.
-const LINGER: Duration = Duration::from_secs(10);
+const LINGER: Duration = Duration::from_secs(120);
 
 #[tokio::main]
 async fn main() -> Result<()> {
     let mut session = Browser::from_env()?
-        .open_with("chrome", "bp_01M03HX9K1Z4KA6ZRJWXA202FG")
+        .open_with("chrome", "bp_01M0DKDFJV426ZJFPNFNMVYR4C", true)
         .await?;
     println!(
         "session {} is {}",
@@ -33,7 +33,7 @@ async fn main() -> Result<()> {
     // A session left to expire is correct but slow: the dashboard shows a
     // browser that is not there until the lease runs out. So close either way,
     // and do not let a noisy shutdown replace why the run failed.
-    match session.close().await {
+    match session.close(true).await {
         Ok(()) => outcome,
         Err(error) => outcome.and(Err(error.into())),
     }
