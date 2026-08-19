@@ -426,6 +426,8 @@ checksum = "1d87ecb2933e8aeadb3e3a02b828fed80a7528047e68b4f424523a0981a3a084"
 [[package]]
 name = "neurun"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a52b5b1af6ef50c2adc7c71f44572382e20374ff73c84b6b9d71b8e072cef82d"
 dependencies = [
  "prost",
  "thiserror",
